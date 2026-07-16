@@ -4,9 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	"os/signal"
 	"strings"
-	"syscall"
 	"time"
 
 	"main/ai"
@@ -347,15 +345,13 @@ func KonekWa() {
 		}
 	}
 
-	sig := make(chan os.Signal, 1)
+}
 
-	signal.Notify(
-		sig,
-		os.Interrupt,
-		syscall.SIGTERM,
-	)
-
-	<-sig
-
-	Client.Disconnect()
+func StopWA() {
+	if Client != nil {
+		Client.Disconnect()
+		fmt.Println("===================================")
+		fmt.Println("WhatsApp Disconnected")
+		fmt.Println("===================================")
+	}
 }

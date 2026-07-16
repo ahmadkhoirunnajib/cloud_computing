@@ -3,6 +3,8 @@ package main
 import (
 	"log"
 	"os"
+	"os/signal"
+	"syscall"
 	"time"
 
 	"main/controllers"
@@ -144,6 +146,19 @@ func main() {
 	// =====================================
 
 	go wa.KonekWa()
+
+	go func() {
+		sig := make(chan os.Signal, 1)
+
+		signal.Notify(sig, os.Interrupt, syscall.SIGTERM)
+
+		<-sig
+
+		log.Println("Menutup WhatsApp...")
+		wa.StopWA()
+
+		os.Exit(0)
+	}()
 
 	// =====================================
 	// Jalankan Server
